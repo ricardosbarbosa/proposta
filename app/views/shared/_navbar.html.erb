@@ -1,0 +1,12 @@
+<%= nav_bar :brand => "Propostas", :responsive => true do %>
+    <%= menu_group do %>
+        
+    <% end %>
+    <%= menu_group :pull => :right do %>
+        <% if true %>
+            <%= menu_item "Log Out",  "", :method => :delete%>
+        <% else %>
+            <%= menu_item "Log In",  "" %>
+        <% end %>
+    <% end %>
+<% end %>
