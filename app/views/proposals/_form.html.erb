@@ -1,18 +1,13 @@
-<%= form_for @proposal, :html => { :class => 'form-horizontal' } do |f| %>
-  <div class="control-group">
-    <%= f.label :title, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :title, :class => 'text_field' %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :description, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_area :description, :class => 'text_area' %>
-    </div>
+<%= form_for @proposal, :html => { :class => 'form-horizontal' , :style => 'text-align: center'} do |f| %>
+  <div >
+    <%= f.text_field :title, :class => 'text_field' , :placeholder => 'Title' %>
   </div>
 
-  <div class="form-actions">
+  <div >
+    <%= f.text_area :description, :class => 'text_area', :placeholder => 'Description', :cols => 500, rows: '10' %>
+  </div>
+
+  <div class="form-actions" style="padding-left: 0px;">
     <%= f.submit nil, :class => 'btn btn-primary' %>
     <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
                 proposals_path, :class => 'btn' %>
