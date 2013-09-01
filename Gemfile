@@ -13,8 +13,13 @@ group :development, :test do
   gem "sqlite3"
 end
 
-gem 'devise'
+gem 'devise', :git => 'git://github.com/plataformatec/devise.git'
 gem "declarative_authorization"
+gem 'omniauth'
+gem 'omniauth-twitter'
+gem 'omniauth-facebook'
+gem 'twitter'
+gem 'fb_graph'
 
 gem "therubyracer"
 gem "less-rails"

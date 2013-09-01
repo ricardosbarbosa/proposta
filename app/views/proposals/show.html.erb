@@ -1,18 +1,15 @@
 <%- model_class = Proposal -%>
+<div style='text-align: center'>
 <div class="page-header">
-  <h1><%=t '.title', :default => model_class.model_name.human.titleize %></h1>
+  <h1><%= @proposal.title %></h1>
 </div>
 
-<dl class="dl-horizontal">
-  <dt><strong><%= model_class.human_attribute_name(:title) %>:</strong></dt>
-  <dd><%= @proposal.title %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:description) %>:</strong></dt>
+<dl class="dl-vertical">
   <dd><%= @proposal.description %></dd>
 </dl>
 
-<div class="form-actions">
-  <%= link_to t('.back', :default => t("helpers.links.back")),
-              proposals_path, :class => 'btn'  %>
+<div class="form-actions" style='text-align: center' >
+<!-- 
   <%= link_to t('.edit', :default => t("helpers.links.edit")),
               edit_proposal_path(@proposal), :class => 'btn' %>
   <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
@@ -20,4 +17,29 @@
               :method => 'delete',
               :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
               :class => 'btn btn-danger' %>
+ -->
+  <%= link_to "Aprovar", edit_proposal_path(@proposal), :class => 'btn btn-primary' %>
+  <%= link_to "Rejeitar", edit_proposal_path(@proposal), :class => 'btn btn-danger' %>
+</div>
+
+
+</div>
+
+<%= form_for @comment, url: proposal_comment_path(@proposal), :html => { :class => 'form-horizontal' , :style => 'text-align: center'} do |f| %>
+  <div >
+    <%= f.text_area :text, :class => 'text_area', :placeholder => 'Description', :cols => '200', rows: '3 ' %>
+  </div>
+
+  <div style="padding-left: 0px;">
+    <%= f.submit "Comentar", :class => 'btn' %>
+  </div>
+<% end %>
+
+
+<div id="comentarios" >
+  <ol>
+  <% @proposal.comments.each do |comment| %>
+    <li> <%= comment.text %> </li>
+  <% end %>
+  </ol>
 </div>

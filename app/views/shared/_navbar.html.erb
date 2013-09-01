@@ -3,10 +3,12 @@
         
     <% end %>
     <%= menu_group :pull => :right do %>
-        <% if true %>
-            <%= menu_item "Log Out",  "", :method => :delete%>
+         <% if current_user %>
+            <%= current_user.email %><%= menu_item "Log Out",  destroy_user_session_path, :method => :delete%>
         <% else %>
-            <%= menu_item "Log In",  "" %>
+            <%= menu_item "Log In",  new_user_session_path %>
         <% end %>
     <% end %>
+
+
 <% end %>

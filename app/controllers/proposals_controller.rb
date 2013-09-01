@@ -1,4 +1,8 @@
 class ProposalsController < ApplicationController
+  filter_access_to :show
+
+  
+
   # GET /proposals
   # GET /proposals.json
   def index
@@ -13,8 +17,31 @@ class ProposalsController < ApplicationController
   # GET /proposals/1
   # GET /proposals/1.json
   def show
-    @proposal = Proposal.find(params[:id])
+    id = params[:id]
 
+    begin
+        Float(id)
+        if current_user
+          @proposal = Proposal.find(id)
+        else
+          redirect_to root_path, :flash => { :error => 'Sem permissão'}
+          return
+        end
+        
+    rescue ArgumentError, TypeError
+      @proposal = Proposal.where(token: id).first
+      unless @proposal 
+        message = "TOKEN ACCESS inválido."
+        redirect_to root_path, :flash => { :error => message}
+        return
+      end
+
+    rescue Exception => e  
+      redirect_to root_path, :flash => { :error => e.message}
+      return 
+    end
+
+    @comment = Comment.new()
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @proposal }
@@ -50,6 +77,36 @@ class ProposalsController < ApplicationController
         format.html { render action: "new" }
         format.json { render json: @proposal.errors, status: :unprocessable_entity }
       end
+    end
+  end
+
+  def comment
+    
+    id = params[:proposal_id]
+
+    begin
+      Float(id)
+      @proposal = Proposal.find(id)
+    rescue ArgumentError, TypeError
+      @proposal = Proposal.where(token: id).first
+      unless @proposal 
+        message = "TOKEN ACCESS inválido 2."
+        redirect_to root_path, :flash => { :error => message}
+        return
+      end
+    rescue Exception => e  
+      redirect_to root_path, :flash => { :error => e.message}
+      return 
+    end
+
+
+    @comment = Comment.new(params[:comment])
+    @comment.proposal = @proposal
+
+    if @comment.save
+      redirect_to :back, notice: '' 
+    else
+      redirect_to :back, :flash => { :error => "Preencha o corpo do comentário." }
     end
   end
 
