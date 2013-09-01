@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130901013354) do
+ActiveRecord::Schema.define(:version => 20130901030625) do
 
   create_table "assignments", :force => true do |t|
     t.integer  "user_id"
@@ -42,13 +42,8 @@ ActiveRecord::Schema.define(:version => 20130901013354) do
 
   add_index "comments", ["proposal_id"], :name => "index_comments_on_proposal_id"
 
-  create_table "proposals", :force => true do |t|
-    t.string   "title"
-    t.text     "description"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
-    t.string   "token"
-  end
+# Could not dump table "proposals" because of following StandardError
+#   Unknown type 'belongs_to' for column 'user'
 
   create_table "roles", :force => true do |t|
     t.string   "name"

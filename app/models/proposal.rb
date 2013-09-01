@@ -1,8 +1,9 @@
 class Proposal < ActiveRecord::Base
   before_save :ensure_proposal_token
 
-  attr_accessible :description, :title, :token
+  attr_accessible :description, :title, :token, :user_id
   has_many :comments
+  belongs_to :user
 
   def ensure_proposal_token
     if token.blank?

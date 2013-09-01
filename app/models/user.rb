@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
   before_save :ensure_authentication_token
-  
+  before_save :ensure_role_proposal
+
   # Include default devise modules. Others available are:
   # :token_authenticatable, :confirmable,
   # :lockable, :timeoutable and :omniauthable
@@ -23,6 +24,8 @@ class User < ActiveRecord::Base
 
   has_many :assignments
   has_many :roles, :through => :assignments
+
+  has_many :proposals
 
   validates_presence_of :email
   validates_uniqueness_of :email
@@ -64,6 +67,14 @@ class User < ActiveRecord::Base
     end
   end
  
+  def ensure_role_proposal
+    role = Role.where(name: 'proposal').first
+    if role 
+      self.roles << role
+    else
+      self.roles.build!({name: 'proposal'}) 
+    end
+  end
   private
   
   def generate_authentication_token

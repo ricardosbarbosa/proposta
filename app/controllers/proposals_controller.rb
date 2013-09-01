@@ -1,12 +1,10 @@
 class ProposalsController < ApplicationController
-  filter_access_to :show
-
-  
+  filter_access_to :all
 
   # GET /proposals
   # GET /proposals.json
   def index
-    @proposals = Proposal.all
+    @proposals = current_user.proposals
 
     respond_to do |format|
       format.html # index.html.erb
@@ -23,6 +21,10 @@ class ProposalsController < ApplicationController
         Float(id)
         if current_user
           @proposal = Proposal.find(id)
+          unless current_user.proposals.map {|p| p.id.to_s} .include? id
+            redirect_to root_path, :flash => { :error => 'Sem permissão, proposta não é sua.'}
+            return
+          end
         else
           redirect_to root_path, :flash => { :error => 'Sem permissão'}
           return
@@ -62,13 +64,17 @@ class ProposalsController < ApplicationController
   # GET /proposals/1/edit
   def edit
     @proposal = Proposal.find(params[:id])
+    unless current_user.proposals.map {|p| p.id.to_s} .include? @proposal.id.to_s
+      redirect_to proposal_path, :flash => { :error => 'Sem permissão, proposta não é sua.'}
+      return
+    end
   end
 
   # POST /proposals
   # POST /proposals.json
   def create
     @proposal = Proposal.new(params[:proposal])
-
+    @proposal.user = current_user
     respond_to do |format|
       if @proposal.save
         format.html { redirect_to @proposal, notice: 'Proposal was successfully created.' }
@@ -99,7 +105,6 @@ class ProposalsController < ApplicationController
       return 
     end
 
-
     @comment = Comment.new(params[:comment])
     @comment.proposal = @proposal
 
@@ -114,6 +119,11 @@ class ProposalsController < ApplicationController
   # PUT /proposals/1.json
   def update
     @proposal = Proposal.find(params[:id])
+
+    unless current_user.proposals.map {|p| p.id.to_s} .include? @proposal.id.to_s
+      redirect_to proposal_path, :flash => { :error => 'Sem permissão, proposta não é sua.'}
+      return
+    end
 
     respond_to do |format|
       if @proposal.update_attributes(params[:proposal])
@@ -130,6 +140,10 @@ class ProposalsController < ApplicationController
   # DELETE /proposals/1.json
   def destroy
     @proposal = Proposal.find(params[:id])
+    unless current_user.proposals.map {|p| p.id.to_s} .include? @proposal.id.to_s
+      redirect_to :back, :flash => { :error => 'Sem permissão, proposta não é sua.'}
+      return
+    end
     @proposal.destroy
 
     respond_to do |format|
