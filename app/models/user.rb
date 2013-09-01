@@ -72,7 +72,7 @@ class User < ActiveRecord::Base
     if role 
       self.roles << role
     else
-      self.roles.build!({name: 'proposal'}) 
+      self.roles.build({name: 'proposal'}) 
     end
   end
   private
