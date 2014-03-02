@@ -1,3 +1,4 @@
+{<img alt='Stories in Ready' src='https://badge.waffle.io/ricardosbarbosa/proposta.png?label=ready&title=Ready' />}[https://waffle.io/ricardosbarbosa/proposta]
 == Welcome to Rails
 
 Rails is a web-application framework that includes everything needed to create
